@@ -18,7 +18,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { id } = params;
 
-  const res = await fetch(`https://notehub-public.goit.study/api/notes/${id}`, {
+  const res = await fetch(`https://notehub-api.goit.study/api/notes/${id}`, {
     headers: {
       Authorization: `Bearer ${process.env.NEXT_PUBLIC_NOTEHUB_TOKEN}`,
     },
@@ -71,7 +71,7 @@ export default async function NoteDetailsPage({ params }: { params: Params }) {
   await queryClient.prefetchQuery({
     queryKey: ["note", id],
     queryFn: () =>
-      fetch(`https://notehub-public.goit.study/api/notes/${id}`, {
+      fetch(`https://notehub-api.goit.study/api/notes/${id}`, {
         headers: {
           Authorization: `Bearer ${process.env.NEXT_PUBLIC_NOTEHUB_TOKEN}`,
         },
