@@ -1,12 +1,12 @@
 import { nextServer } from "./api";
 import type { AxiosResponse } from "axios";
 import type { Note, NoteTag } from "@/types/note";
-import type { User } from '@/types/user';
+import type { User } from "@/types/user";
 
 export type RegisterRequest = {
   email: string;
   password: string;
-  userName: string;
+  username: string; 
 };
 
 export const register = async (data: RegisterRequest) => {
@@ -25,15 +25,15 @@ export const login = async (data: LoginRequest) => {
 };
 
 export const logout = async (): Promise<void> => {
-  await nextServer.post('/auth/logout')
+  await nextServer.post("/auth/logout");
 };
 
-type CheckSessionRequest = {
+type CheckSessionResponse = {
   success: boolean;
 };
 
 export const checkSession = async () => {
-  const res = await nextServer.get<CheckSessionRequest>("/auth/session");
+  const res = await nextServer.get<CheckSessionResponse>("/auth/session");
   return res.data.success;
 };
 
@@ -45,13 +45,11 @@ export const getMe = async () => {
 
 export interface UpdateUserRequest {
   username: string;
-  email: string;
 }
 
 export const updateUser = async (data: UpdateUserRequest): Promise<User> => {
   const { data: updatedUser } = await nextServer.patch<User>("/users/me", {
     username: data.username,
-    email: data.email,
   });
   return updatedUser;
 };
@@ -63,10 +61,11 @@ export interface FetchNotesParams {
   tag?: string;
 }
 
+
 export interface FetchNotesResponse {
   page: number;
-  perPage: number;
-  totalPages: number;
+  perPage?: number;
+  totalPages?: number;
   notes: Note[];
 }
 
@@ -79,16 +78,20 @@ export interface CreateNoteParams {
 export const fetchNotes = async (
   params: FetchNotesParams
 ): Promise<FetchNotesResponse> => {
-  const { data }: AxiosResponse<FetchNotesResponse> = await nextServer.get("/notes", {
-    params,
-  });
+  const { data }: AxiosResponse<FetchNotesResponse> = await nextServer.get(
+    "/notes",
+    { params }
+  );
   return data;
 };
 
 export const createNote = async (
   noteData: CreateNoteParams
 ): Promise<Note> => {
-  const { data }: AxiosResponse<Note> = await nextServer.post("/notes", noteData);
+  const { data }: AxiosResponse<Note> = await nextServer.post(
+    "/notes",
+    noteData
+  );
   return data;
 };
 

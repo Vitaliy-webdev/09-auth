@@ -5,9 +5,11 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import css from "./EditProfilePage.module.css";
 import { getMe, updateUser } from "@/lib/api/clientApi";
+import { useAuthStore } from "@/lib/store/authStore";
 
 export default function EditProfilePage() {
   const router = useRouter();
+  const setUser = useAuthStore((state) => state.setUser);
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [avatar, setAvatar] = useState(
@@ -24,12 +26,12 @@ export default function EditProfilePage() {
         setUsername(user.username || "");
         setEmail(user.email);
         setAvatar(
-          user.photoUrl ||
+          user.avatar ||
             "https://ac.goit.global/fullstack/react/notehub-og-meta.jpg"
         );
       } catch (err) {
         console.error(err);
-        setError("Error, update falied");
+        setError("Error, update failed");
       } finally {
         setLoading(false);
       }
@@ -49,7 +51,12 @@ export default function EditProfilePage() {
     }
 
     try {
-      await updateUser({ username: username.trim(), email });
+      const updatedUser = await updateUser({
+        username: username.trim(),
+      });
+
+      setUser(updatedUser);
+
       router.push("/profile");
     } catch (err) {
       console.error(err);

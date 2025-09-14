@@ -1,4 +1,4 @@
-import { fetchNotes } from "@/lib/api/clientApi";
+import { getNotes } from "@/lib/api/serverApi";
 import {
   QueryClient,
   dehydrate,
@@ -6,6 +6,7 @@ import {
 } from "@tanstack/react-query";
 import NotesClient from "./Notes.client";
 import type { Metadata } from "next";
+import type { Note } from "@/types/note";
 
 export async function generateMetadata({
   params,
@@ -49,15 +50,23 @@ export default async function NotesPage({
   const tag = params.slug[0] || "";
 
   const queryClient = new QueryClient();
+
+  const allNotesResponse = await getNotes();
+  const allNotes: Note[] = allNotesResponse.data.notes;
+
+  const filteredNotes =
+    tag && tag !== "All"
+      ? allNotes.filter((note: Note) => note.tag === tag)
+      : allNotes;
+
   await queryClient.prefetchQuery({
     queryKey: ["notes", 1, "", tag],
-    queryFn: () =>
-      fetchNotes({
-        page: 1,
-        perPage: 12,
-        search: "",
-        tag: tag && tag !== "All" ? tag : undefined,
-      }),
+    queryFn: async () => ({
+      notes: filteredNotes,
+      page: 1,
+      perPage: 12,
+      totalPages: Math.ceil(filteredNotes.length / 12),
+    }),
   });
 
   return (

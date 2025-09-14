@@ -2,6 +2,12 @@ import Link from "next/link";
 import Image from "next/image";
 import { getServerMe } from "@/lib/api/serverApi";
 import css from "./ProfilePage.module.css";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Profile Page",
+  description: "User profile with avatar, username and email",
+};
 
 const Profile = async () => {
   const user = await getServerMe();
@@ -16,7 +22,7 @@ const Profile = async () => {
         <div className={css.avatarWrapper}>
           <Image
             src={
-              user.photoUrl ||
+              user.avatar ||
               "https://ac.goit.global/fullstack/react/notehub-og-meta.jpg"
             }
             alt="User Avatar"
