@@ -1,7 +1,7 @@
 import { nextServer } from "./api";
 import type { AxiosResponse } from "axios";
 import type { Note, NoteTag } from "@/types/note";
-import { User } from '@/types/user';
+import type { User } from '@/types/user';
 
 export type RegisterRequest = {
   email: string;
