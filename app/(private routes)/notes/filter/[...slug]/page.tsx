@@ -52,7 +52,7 @@ export default async function NotesPage({
   const queryClient = new QueryClient();
 
   const allNotesResponse = await getNotes();
-  const allNotes: Note[] = allNotesResponse.data.notes;
+  const allNotes: Note[] = allNotesResponse;
 
   const filteredNotes =
     tag && tag !== "All"
