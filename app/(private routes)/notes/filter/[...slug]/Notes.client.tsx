@@ -40,7 +40,7 @@ export default function NotesClient({ initialTag }: Props) {
       <header className={css.toolbar}>
         <SearchBox value={search} onChange={handleSearchChange} />
 
-        {data && data.totalPages > 1 && (
+        {data?.totalPages && data.totalPages > 1 && (
           <Pagination
             currentPage={page}
             pageCount={data.totalPages}
