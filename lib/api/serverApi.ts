@@ -13,15 +13,16 @@ export const checkServerSession = async () => {
   return res; 
 };
 
-export const getNotes = async (): Promise<Note[]> => {
+export const getNotes = async (): Promise<{ notes: Note[] }> => {
   const cookieStore = await cookies();
-  const { data } = await nextServer.get<Note[]>("/notes", {
+  const { data } = await nextServer.get<{ notes: Note[] }>("/notes", {
     headers: {
       Cookie: cookieStore.toString(),
     },
   });
   return data;
 };
+
 
 export const getNoteById = async (id: string): Promise<Note> => {
   const cookieStore = await cookies();
