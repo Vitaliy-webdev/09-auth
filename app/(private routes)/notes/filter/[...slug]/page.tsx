@@ -60,7 +60,7 @@ export default async function NotesPage({
       : allNotes;
 
   await queryClient.prefetchQuery({
-    queryKey: ["notes", 1, "", tag],
+    queryKey: ["notes", tag],
     queryFn: async () => ({
       notes: filteredNotes,
       page: 1,
